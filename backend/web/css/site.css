@@ -1,0 +1,11 @@
+.card-title-question-name {
+    overflow: hidden;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+.scroll-area-lg {
+    height: auto!important;
+    max-height: 400px;
+}
