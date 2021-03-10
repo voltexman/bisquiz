@@ -2,8 +2,9 @@
 
 use backend\widgets\QuestionFAQRightSidebarWidget;
 use common\models\Quiz;
+use quiz\helpers\QuestionHelper;
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
 
 $js = <<<JS
@@ -85,6 +86,8 @@ $this->registerJs($js);
                                 'formId' => 'dynamic-form',
                                 'formFields' => [
                                     'question_name',
+                                    'question_hint',
+                                    'type'
                                 ],
                             ]); ?>
                             <table class="table table-bordered table-striped">
@@ -108,6 +111,8 @@ $this->registerJs($js);
                                             }
                                             ?>
                                             <?= $form->field($modelHouse, "[{$indexHouse}]question_name")->label(false)->textInput(['maxlength' => true]) ?>
+
+                                            <?= $form->field($modelHouse, "[{$indexHouse}]type")->label(false)->dropDownList(QuestionHelper::typeList()) ?>
                                         </td>
                                         <td>
                                             <?= $this->render('_form-rooms', [
@@ -145,7 +150,7 @@ $this->registerJs($js);
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton($modelPerson->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
+<!--        --><?//= Html::submitButton($modelPerson->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

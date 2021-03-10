@@ -584,7 +584,7 @@ use yii\helpers\Html;
                     <button type="button" data-toggle="dropdown" class="p-0 mr-2 btn btn-link">
                                 <span class="icon-wrapper icon-wrapper-alt rounded-circle">
                                     <span class="icon-wrapper-bg bg-focus"></span>
-                                    <span class="language-icon opacity-8 flag large DE"></span>
+                                    <span class="language-icon opacity-8 flag large <?= mb_strtoupper(Yii::$app->language)?>"></span>
                                 </span>
                     </button>
                     <div tabindex="-1" role="menu" aria-hidden="true" class="rm-pointers dropdown-menu dropdown-menu-right">
@@ -592,31 +592,17 @@ use yii\helpers\Html;
                             <div class="dropdown-menu-header-inner pt-4 pb-4 bg-focus">
                                 <div class="menu-header-image opacity-05" style="background-image: url('/images/dropdown-header/city2.jpg');"></div>
                                 <div class="menu-header-content text-center text-white">
-                                    <h6 class="menu-header-subtitle mt-0"> Choose Language</h6>
+                                    <h6 class="menu-header-subtitle mt-0"> <?= Yii::t('header', 'CHANGE_LANGUAGE_WIDGET_TITLE') ?></h6>
                                 </div>
                             </div>
                         </div>
-                        <h6 tabindex="-1" class="dropdown-header"> Popular Languages</h6>
-                        <button type="button" tabindex="0" class="dropdown-item">
-                            <span class="mr-3 opacity-8 flag large US"></span> USA
-                        </button>
-                        <button type="button" tabindex="0" class="dropdown-item">
-                            <span class="mr-3 opacity-8 flag large CH"></span> Switzerland
-                        </button>
-                        <button type="button" tabindex="0" class="dropdown-item">
-                            <span class="mr-3 opacity-8 flag large FR"></span> France
-                        </button>
-                        <button type="button" tabindex="0" class="dropdown-item">
-                            <span class="mr-3 opacity-8 flag large ES"></span>Spain
-                        </button>
-                        <div tabindex="-1" class="dropdown-divider"></div>
-                        <h6 tabindex="-1" class="dropdown-header">Others</h6>
-                        <button type="button" tabindex="0" class="dropdown-item active">
-                            <span class="mr-3 opacity-8 flag large DE"></span> Germany
-                        </button>
-                        <button type="button" tabindex="0" class="dropdown-item">
-                            <span class="mr-3 opacity-8 flag large IT"></span> Italy
-                        </button>
+                        <h6 tabindex="-1" class="dropdown-header"> <?= Yii::t('header', 'SELECT_LANGUAGE_WIDGET_TITLE') ?></h6>
+                        <a href="<?= \yii\helpers\Url::current(['language' => 'ru']) ?>" type="button" tabindex="0" class="dropdown-item">
+                            <span class="mr-3 opacity-8 flag large RU"></span> Русский
+                        </a>
+                        <a href="<?= \yii\helpers\Url::current(['language' => 'uk']) ?>" type="button" tabindex="0" class="dropdown-item">
+                            <span class="mr-3 opacity-8 flag large UA"></span> Українська
+                        </a>
                     </div>
                 </div>
                 <div class="dropdown">

@@ -3,6 +3,7 @@
 use backend\widgets\QuizFAQRightSidebarWidget;
 use backend\widgets\QuizNoQuizzesInfoWidget;
 use quiz\helpers\QuestionHelper;
+use yii\helpers\Html;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -40,7 +41,7 @@ $this->params['subtitle'] = 'Список всех доступных квизо
                                 <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
                                     <div class="icon-wrapper rounded-circle">
                                         <div class="icon-wrapper-bg opacity-10 bg-warning"></div>
-                                        <i class="lnr-laptop-phone text-dark opacity-8"></i>
+                                        <i class="lnr-list text-dark opacity-8"></i>
                                     </div>
                                     <div class="widget-chart-content">
                                         <div class="widget-subheading">Вопросов</div>
@@ -60,7 +61,7 @@ $this->params['subtitle'] = 'Список всех доступных квизо
                                 <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
                                     <div class="icon-wrapper rounded-circle">
                                         <div class="icon-wrapper-bg opacity-9 bg-danger"></div>
-                                        <i class="lnr-graduation-hat text-white"></i>
+                                        <i class="lnr-layers text-white"></i>
                                     </div>
                                     <div class="widget-chart-content">
                                         <div class="widget-subheading">Результатов</div>
@@ -106,13 +107,13 @@ $this->params['subtitle'] = 'Список всех доступных квизо
                                 <ul class="todo-list-wrapper list-group list-group-flush">
                                     <?php foreach ($quiz->questions as $question) : ?>
                                         <li class="list-group-item">
-                                            <div class="todo-indicator bg-focus"></div>
+                                            <div class="todo-indicator bg-warning"></div>
                                             <div class="widget-content p-0 pl-2">
                                                 <div class="widget-content-wrapper">
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading"><?= $question->question_name ?></div>
+                                                        <div class="widget-heading"><?= Html::encode($question->question_name) ?></div>
                                                         <?php foreach ($question->answers as $answer) : ?>
-                                                            <div class="badge bg-light"><?= $answer->answer_name ?></div>
+                                                            <div class="badge bg-light"><?= Html::encode($answer->answer_name) ?></div>
                                                         <?php endforeach; ?>
                                                     </div>
                                                 </div>

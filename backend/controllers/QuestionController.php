@@ -2,11 +2,14 @@
 
 namespace backend\controllers;
 
+use common\models\Answer;
 use common\models\Quiz;
 use Yii;
 use common\models\Question;
 use common\models\QuestionSearch;
+use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -88,13 +91,52 @@ class QuestionController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (Yii::$app->request->isAjax) {
+            $questions = Question::findOne($id);
+
+            if ($questions->load(Yii::$app->request->post())) {
+                $questions->save();
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+                $oldAnswers = ArrayHelper::getColumn(Answer::find()->where(['question_id' => $id])->select('id')->asArray()->all(), 'id');
+                $newAnswers = ArrayHelper::getColumn(Yii::$app->request->post('Question')['answers'], 'id');
+                $answerToDelete = array_diff($oldAnswers, $newAnswers);
+
+                Answer::deleteAll(['id' => $answerToDelete]);
+
+                foreach (Yii::$app->request->post('Question')['answers'] as $answer) {
+                    $hasAnswer = Answer::findOne($answer['id']);
+
+                    if ($hasAnswer) {
+                        $hasAnswer->question_id = $questions->id;
+                        $hasAnswer->answer_name = $answer['answer_name'];
+                        $hasAnswer->save();
+                    } else {
+                        $modelAnswer = new Answer();
+                        $modelAnswer->question_id = $questions->id;
+                        $modelAnswer->answer_name = $answer['answer_name'];
+                        $modelAnswer->save();
+
+                    }
+//                    return $oldAnswers;
+                }
+            }
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('_form', [
             'model' => $model,
         ]);
+    }
+
+    public function actionQuestionOrder()
+    {
+        if (Yii::$app->request->isAjax) {
+            $post = Yii::$app->request->post();
+            if (isset($post['key'], $post['pos'])) {
+                $movie = Question::findOne($post['key']);
+                if ($movie) $movie->order($post['pos'], 'sort');
+            }
+        }
     }
 
     /**

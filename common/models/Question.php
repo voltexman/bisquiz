@@ -12,6 +12,7 @@ use Yii;
  * @property int|null $sort
  * @property string|null $question_name
  * @property string|null $question_hint
+ * @property int|null $type
  * @property int|null $multiple
  * @property int|null $required
  * @property int|null $own
@@ -24,6 +25,22 @@ use Yii;
  */
 class Question extends \yii\db\ActiveRecord
 {
+    const PUBLISHED_STATUS_ON = 1;
+    const PUBLISHED_STATUS_OFF = 0;
+
+    const TYPE_IMAGE = 1;
+    const TYPE_TEXT = 2;
+
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => 'sjaakp\sortable\Sortable',
+                'orderAttribute' => 'sort'
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -38,7 +55,8 @@ class Question extends \yii\db\ActiveRecord
     public function rules(): array
     {
         return [
-            [['quiz_id', 'sort', 'multiple', 'required', 'own', 'status'], 'integer'],
+            [['question_name'], 'required'],
+            [['quiz_id', 'sort', 'type', 'multiple', 'required', 'own', 'status'], 'integer'],
             [['question_hint'], 'string'],
             [['question_name'], 'string', 'max' => 255],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::class, 'targetAttribute' => ['quiz_id' => 'id']],

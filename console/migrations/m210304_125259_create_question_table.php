@@ -18,6 +18,7 @@ class m210304_125259_create_question_table extends Migration
             'sort' => $this->smallInteger(),
             'question_name' => $this->string(),
             'question_hint' => $this->text(),
+            'type' => $this->smallInteger(),
             'multiple' => $this->boolean(),
             'required' => $this->boolean(),
             'own' => $this->boolean(),

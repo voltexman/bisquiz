@@ -47,6 +47,8 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => [
+            'class' => 'codemix\localeurls\UrlManager',
+            'languages' => ['ru', 'uk'],
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [

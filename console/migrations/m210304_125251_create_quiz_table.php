@@ -15,6 +15,7 @@ class m210304_125251_create_quiz_table extends Migration
         $this->createTable('{{%quiz}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(),
+            'quiz_alias' => $this->string(),
             'quiz_name' => $this->string(),
             'consultant_name' => $this->string(),
             'consultant_position' => $this->string(),

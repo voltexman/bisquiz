@@ -17,15 +17,17 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/main.js',
+//        'js/html5sortable.min.js',
+        'https://code.jquery.com/ui/1.12.1/jquery-ui.js',
+        'js/questions.js',
 //        '//cdn.jsdelivr.net/npm/sweetalert2@10',
-//        'https://code.jquery.com/ui/1.12.1/jquery-ui.js'
-//        'js/html5sortable.min.js'
     ];
     public $depends = [
 //        'yii\web\YiiAsset',
 //        'yii\bootstrap\BootstrapAsset',
 //        'yii\bootstrap4\BootstrapAsset',
 //        'yii\bootstrap4\BootstrapPluginAsset'
+    'yii\web\JqueryAsset'
     ];
 
 //    public $jsOptions = ['position' => \yii\web\View::POS_HEAD];

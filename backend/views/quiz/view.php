@@ -3,8 +3,7 @@
 use common\models\Question;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\web\JqueryAsset;
-use yii\web\YiiAsset;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Quiz */
@@ -12,8 +11,12 @@ use yii\web\YiiAsset;
 
 $this->title = Html::encode($model->quiz_name);
 $this->params['icon'] = 'pe-7s-menu icon-gradient bg-plum-plate';
-YiiAsset::register($this);
-$this->registerJsFile('js/questions.js', ['depends' => JqueryAsset::class])
+$this->registerCss('.ui-sortable-helper
+{
+   background:none;    
+   border:none;   
+}')
+
 ?>
 <div class="quiz-view">
 
@@ -46,58 +49,73 @@ $this->registerJsFile('js/questions.js', ['depends' => JqueryAsset::class])
 
     <div class="row">
         <div class="col-sm-6">
-            <?php foreach ($questions as $question) : ?>
-                <div class="card-hover-shadow-2x mb-3 card question" id="<?= $question->id ?>">
-                    <div class="card-header"><i
-                                class="header-icon pe-7s-menu icon-gradient bg-plum-plate"> </i>№ <?= $question->sort ?>
-                        <div class="ml-3 card-title-question-name"></div>
-                        <div class="btn-actions-pane-right actions-icon-btn">
-                            <a href="<?= Url::to(['question/delete', 'id' => $question->id]) ?>"
-                               class="btn-icon btn-icon-only btn btn-link btn-delete-question">
-                                <i class="fa fa-trash"></i>
-                            </a>
+            <?php Pjax::begin(['id' => 'questionsList']) ?>
+            <div class="sortable">
+                <?php foreach ($questions->getModels() as $question) : ?>
+                    <div class="question" id="key-<?= $question->id ?>" data-pos="<?= $question->sort ?>">
+                        <div class="card-hover-shadow-2x mb-3 card">
+                            <div class="card-header"><i
+                                        class="header-icon pe-7s-menu icon-gradient bg-plum-plate"> </i>№ <?= $question->sort ?>
+                                <div class="ml-3 card-title-question-name"></div>
+                                <div class="btn-actions-pane-right actions-icon-btn">
+                                    <a href="<?= Url::to(['question/delete', 'id' => $question->id]) ?>"
+                                       class="btn-icon btn-icon-only btn btn-link btn-delete-question">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
 
-                            <a href="<?= Url::to(['question/sort', 'id' => $question->id]) ?>"
-                               class="btn-icon btn-icon-only btn btn-link btn-delete-question">
-                                <i class="fa fa-arrows-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="collapse-block card">
-                        <div class="card-body">
-                            <div class="card-body-question-name">
-                                <h4><?= Html::encode($question->question_name) ?></h4>
+                                    <span class="btn-icon btn-icon-only btn btn-link sortable-handle">
+                                        <i class="fa fa-arrows-alt"></i>
+                                    </span>
+                                </div>
                             </div>
-                            <div class="d-block">
-                                <?php foreach ($question->answers as $answer) : ?>
-                                    <div class="mb-2 mr-2 badge p-3 bg-light"><?= Html::encode($answer->answer_name) ?></div>
-                                <?php endforeach; ?>
-                            </div>
-                            <div class="float-left">
-                                <div class="mb-2 mr-2 badge badge-dot badge-dot-lg badge-secondary">Secondary</div>
-                                <?= $question->required ? 'Обязательный вопрос' : 'Не обязательный вопрос' ?>
-                                <br>
-                                <div class="mb-2 mr-2 badge badge-dot badge-dot-lg badge-secondary">Secondary</div>
-                                <?= $question->own ? 'Можно писать свой ответ' : 'Свой ответ не предусмотрен' ?>
-                                <br>
-                                <div class="mb-2 mr-2 badge badge-dot badge-dot-lg badge-secondary">Secondary</div>
-                                <?= $question->multiple ? 'Можно выбирать несколько ответов' : 'Можно выбрать только один ответ' ?>
-                            </div>
-                        </div>
-                        <div class="d-block text-right card-footer">
-                            <div class="float-right">
-                                <div class="status">
-                                <input type="checkbox" data-on="Вкл" data-off="Выкл &nbsp" <?= $question->status ? 'checked' : null ?> data-toggle="toggle"
-                                       data-size="small" class="change-status">
+                            <div class="collapse-block card">
+                                <div class="card-body">
+                                    <div class="card-body-question-name">
+                                        <h4><?= Html::encode($question->question_name) ?></h4>
+                                    </div>
+                                    <div class="d-block">
+                                        <?php foreach ($question->answers as $answer) : ?>
+                                            <div class="mb-2 mr-2 badge p-3 bg-light"><?= Html::encode($answer->answer_name) ?></div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <div class="float-left">
+                                        <div class="mb-2 mr-2 badge badge-dot badge-dot-lg badge-secondary">&nbsp</div>
+                                        <?= $question->required ? 'Обязательный вопрос' : 'Не обязательный вопрос' ?>
+                                        <br>
+                                        <div class="mb-2 mr-2 badge badge-dot badge-dot-lg badge-secondary">&nbsp</div>
+                                        <?= $question->own ? 'Можно писать свой ответ' : 'Свой ответ не предусмотрен' ?>
+                                        <br>
+                                        <div class="mb-2 mr-2 badge badge-dot badge-dot-lg badge-secondary">&nbsp</div>
+                                        <?= $question->multiple ? 'Можно выбирать несколько ответов' : 'Можно выбрать только один ответ' ?>
+                                    </div>
+                                </div>
+                                <div class="d-block text-right card-footer">
+                                    <div class="float-left">
+                                        <input type="checkbox" data-on="Вкл"
+                                               data-off="Выкл &nbsp" <?= $question->status ? 'checked' : null ?>
+                                               data-toggle="toggle"
+                                               data-size="small" class="change-status">
+                                    </div>
+                                    <div class="float-right">
+                                        <a href="<?= Url::to(['question/update', 'id' => $question->id]) ?>"
+                                           class="btn-edit btn btn-primary btn-sm"
+                                           data-toggle="modal" data-target=".bd-example-modal-lg">Редактировать <i
+                                                    class="fa fa-edit"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
+            <?php Pjax::end() ?>
         </div>
     </div>
-    <button type="button" data-type="question" title="sdgg" text="sdfghdsf" class="btn btn-primary btn-show-swal">Show
-        Alert</button>
+</div>
 
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
 </div>

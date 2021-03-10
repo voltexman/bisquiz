@@ -1,35 +1,48 @@
 <?php
 
+use unclead\multipleinput\MultipleInput;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Question */
 /* @var $form yii\widgets\ActiveForm */
+
 ?>
 
 <div class="question-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'quiz_id')->textInput() ?>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <?= $form->field($model, 'question_name') ?>
 
-    <?= $form->field($model, 'sort')->textInput() ?>
+        <?= $form->field($model, 'question_hint') ?>
 
-    <?= $form->field($model, 'question_name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'question_hint')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'multiple')->textInput() ?>
-
-    <?= $form->field($model, 'required')->textInput() ?>
-
-    <?= $form->field($model, 'own')->textInput() ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('question', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= $form->field($model, 'answers')->widget(MultipleInput::class, [
+            'min' => 2,
+            'columns' => [
+                [
+                    'name'  => 'answer_name',
+//                    'type'  => \vova07\imperavi\Widget::className(),
+//                    'title' => 'Answer Test',
+                ],
+                [
+                        'name' => 'id',
+                    'type' => \unclead\multipleinput\MultipleInputColumn::TYPE_HIDDEN_INPUT
+                ]
+            ]
+        ]); ?>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary'])?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -10,6 +10,11 @@ class BackendConfig
     public static function translations(): array
     {
         return [
+            'header' => [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'basePath' => '@backend/messages',
+//                'sourceLanguage' => 'ru-RU',
+            ],
             'quiz' => [
                 'class' => 'yii\i18n\PhpMessageSource',
                 'basePath' => '@backend/messages',

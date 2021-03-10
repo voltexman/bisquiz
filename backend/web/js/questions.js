@@ -13,17 +13,75 @@ $(".collapse-all-questions").on("click", function () {
     });
 });
 
+$('.btn-save').on('click', function () {
+    $('#dynamic-form').yiiActiveForm('submitForm');
+});
+
+$(document).on('click', '.btn-edit', function (event) {
+    event.preventDefault();
+    let url = $(this).attr('href');
+    $('.modal-content').load(url, function () {
+        let $form = $(this).find('form');
+        $form.on('beforeSubmit', function () {
+            let data = $form.serialize();
+            $.ajax({
+                url: $form.attr('action'),
+                type: 'POST',
+                data: data,
+                success: function (data) {
+                    $.pjax.reload({container: '#questionsList'});
+                    $('.modal-content').empty();
+                },
+                error: function (jqXHR, errMsg) {
+                    alert(errMsg);
+                }
+            });
+            $("[data-dismiss=modal]").trigger({type: "click"});
+            return false;
+        })
+    });
+    $('.modal').appendTo('body');
+});
+
+$(document).ready(function () {
+    // sortable('.sortable', 'serialize', {
+    //     handle: '.sortable-handle',
+    //     forcePlaceholderSize: true,
+    //     itemSerializer: (serializedItem, sortableContainer) => {
+    //         return {
+    //             position:  serializedItem.index + 1,
+    //             html: serializedItem.html
+    //         }
+    //     }
+    // dropTargetContainerClass: 'sorting'
+    // });
+    $('.sortable').sortable({
+        items: '.question',
+        handle: '.sortable-handle',
+        forcePlaceholderSize: true,
+        opacity: .8,
+        update: function (event, ui) {
+            let data = $(this).sortable('serialize');
+            let lang = $('html').attr('lang');
+
+            $.post({
+                url: '/' + lang + '/question/question-order',
+                data: data,
+            });
+            console.log(data);
+        }
+    });
+});
+
+$(document).on("pjax:success", function () {
+    // document.location.replace();
+});
 
 
 // $('.change-status').on('change', function () {
-    // let id = $(this).closest('question').attr('id');
-    // console.log('sdg')
+// let id = $(this).closest('question').attr('id');
+// console.log('sdg')
 // })
-
-
-
-
-
 
 
 // $(".btn-add").on("click", function (event) {

@@ -4,6 +4,7 @@ namespace common\models;
 
 use JetBrains\PhpStorm\ArrayShape;
 use Yii;
+use yii\helpers\Inflector;
 
 /**
  * This is the model class for table "quiz".
@@ -11,6 +12,7 @@ use Yii;
  * @property int $id
  * @property int|null $user_id
  * @property string|null $quiz_name
+ * @property string|null $quiz_alias
  * @property string|null $consultant_name
  * @property string|null $consultant_position
  * @property int|null $status
@@ -20,6 +22,9 @@ use Yii;
  */
 class Quiz extends \yii\db\ActiveRecord
 {
+    const PUBLICATION_STATUS_ON = 1;
+    const PUBLICATION_STATUS_OFF = 0;
+
     /**
      * {@inheritdoc}
      */
@@ -34,8 +39,9 @@ class Quiz extends \yii\db\ActiveRecord
     public function rules(): array
     {
         return [
+            [['quiz_name'], 'required'],
             [['user_id', 'status'], 'integer'],
-            [['quiz_name', 'consultant_name', 'consultant_position'], 'string', 'max' => 255],
+            [['quiz_name', 'quiz_alias', 'consultant_name', 'consultant_position'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -80,5 +86,12 @@ class Quiz extends \yii\db\ActiveRecord
     public static function find()
     {
         return new QuizQuery(get_called_class());
+    }
+
+    public function beforeSave($insert)
+    {
+        $this->quiz_alias = Inflector::slug($this->quiz_name);
+
+        return parent::beforeSave($insert);
     }
 }

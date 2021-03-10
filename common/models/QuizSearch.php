@@ -29,7 +29,7 @@ class QuizSearch extends Quiz
      */
     public function search($params)
     {
-        $query = Quiz::find();
+        $query = User::findOne(\Yii::$app->user->getId())->getQuizzes();
 
         // add conditions that should always apply here
 

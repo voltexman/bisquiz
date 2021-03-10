@@ -9,6 +9,7 @@ use common\models\Quiz;
 use common\models\QuizSearch;
 use Exception;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -41,7 +42,12 @@ class QuizController extends Controller
     public function actionView($id): string
     {
         $model = $this->findModel($id);
-        $questions = $model->questions;
+
+        $questions = new ActiveDataProvider([
+            'query' => $model->getQuestions(),
+            'sort' => ['defaultOrder' => ['sort' => SORT_ASC]],
+            'pagination' => false
+        ]);
 
         return $this->render('view', [
             'model' => $model,
@@ -59,6 +65,8 @@ class QuizController extends Controller
         $modelPerson = new Quiz;
         $modelsHouse = [new Question];
         $modelsRoom = [[new Answer]];
+
+        $modelPerson->user_id = Yii::$app->user->identity->getId();
 
         if ($modelPerson->load(Yii::$app->request->post())) {
 
@@ -140,6 +148,8 @@ class QuizController extends Controller
         $modelsRoom = [];
         $oldRooms = [];
 
+        $modelPerson->user_id = Yii::$app->user->identity->getId();
+
         if (!empty($modelsHouse)) {
             foreach ($modelsHouse as $indexHouse => $modelHouse) {
                 $rooms = $modelHouse->answers;
@@ -184,11 +194,11 @@ class QuizController extends Controller
                 try {
                     if ($flag = $modelPerson->save(false)) {
 
-                        if (! empty($deletedRoomsIDs)) {
+                        if (!empty($deletedRoomsIDs)) {
                             Answer::deleteAll(['id' => $deletedRoomsIDs]);
                         }
 
-                        if (! empty($deletedHouseIDs)) {
+                        if (!empty($deletedHouseIDs)) {
                             Question::deleteAll(['id' => $deletedHouseIDs]);
                         }
 
@@ -229,8 +239,8 @@ class QuizController extends Controller
 
         return $this->render('update', [
             'modelPerson' => $modelPerson,
-            'modelsHouse' => (empty($modelsHouse)) ? [new Question()] : $modelsHouse,
-            'modelsRoom' => (empty($modelsRoom)) ? [[new Answer()]] : $modelsRoom
+            'modelsHouse' => (empty($modelsHouse)) ? [new Question] : $modelsHouse,
+            'modelsRoom' => (empty($modelsRoom)) ? [[new Answer]] : $modelsRoom
         ]);
     }
 

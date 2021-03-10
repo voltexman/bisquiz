@@ -141,6 +141,16 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->getPrimaryKey();
     }
 
+    public function getUserName()
+    {
+        return $this->username;
+    }
+
+    public function getQuizzes()
+    {
+        return $this->hasMany(Quiz::class, ['user_id' => 'id']);
+    }
+
     /**
      * {@inheritdoc}
      */
