@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * QuestionController implements the CRUD actions for Question model.
@@ -96,10 +97,20 @@ class QuestionController extends Controller
 
             if ($questions->load(Yii::$app->request->post())) {
                 $questions->save();
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
 
-                $oldAnswers = ArrayHelper::getColumn(Answer::find()->where(['question_id' => $id])->select('id')->asArray()->all(), 'id');
-                $newAnswers = ArrayHelper::getColumn(Yii::$app->request->post('Question')['answers'], 'id');
+                $oldAnswers = ArrayHelper::getColumn(
+                    Answer::find()
+                        ->where(['question_id' => $id])
+                        ->select('id')
+                        ->asArray()
+                        ->all(), 'id'
+                );
+
+                $newAnswers = ArrayHelper::getColumn(
+                    Yii::$app->request->post('Question')['answers'], 'id'
+                );
+
                 $answerToDelete = array_diff($oldAnswers, $newAnswers);
 
                 Answer::deleteAll(['id' => $answerToDelete]);
@@ -118,7 +129,6 @@ class QuestionController extends Controller
                         $modelAnswer->save();
 
                     }
-//                    return $oldAnswers;
                 }
             }
         }
@@ -128,13 +138,12 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function actionQuestionOrder()
+    public function actionQuestionOrder(): void
     {
         if (Yii::$app->request->isAjax) {
             $post = Yii::$app->request->post();
             if (isset($post['key'], $post['pos'])) {
-                $movie = Question::findOne($post['key']);
-                if ($movie) $movie->order($post['pos'], 'sort');
+                $this->findModel($post['key'])->order($post['pos']);
             }
         }
     }
