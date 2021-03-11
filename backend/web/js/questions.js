@@ -61,14 +61,15 @@ $(document).ready(function () {
         forcePlaceholderSize: true,
         opacity: .8,
         update: function (event, ui) {
-            let data = $(this).sortable('serialize');
             let lang = $('html').attr('lang');
 
             $.post({
                 url: '/' + lang + '/question/question-order',
-                data: data,
+                data: {key: ui.item.attr('id'), pos: ui.item.index()},
+                success: function () {
+                    alert('перемещено')
+                }
             });
-            console.log(data);
         }
     });
 });

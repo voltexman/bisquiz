@@ -52,7 +52,7 @@ $this->registerCss('.ui-sortable-helper
             <?php Pjax::begin(['id' => 'questionsList']) ?>
             <div class="sortable">
                 <?php foreach ($questions->getModels() as $question) : ?>
-                    <div class="question" id="key-<?= $question->id ?>" data-pos="<?= $question->sort ?>">
+                    <div class="question" id="<?= $question->id ?>">
                         <div class="card-hover-shadow-2x mb-3 card">
                             <div class="card-header"><i
                                         class="header-icon pe-7s-menu icon-gradient bg-plum-plate"> </i>№ <?= $question->sort ?>

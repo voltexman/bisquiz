@@ -116,9 +116,8 @@ class QuestionController extends Controller
                 Answer::deleteAll(['id' => $answerToDelete]);
 
                 foreach (Yii::$app->request->post('Question')['answers'] as $answer) {
-                    $hasAnswer = Answer::findOne($answer['id']);
 
-                    if ($hasAnswer) {
+                    if ($hasAnswer = Answer::findOne($answer['id'])) {
                         $hasAnswer->question_id = $questions->id;
                         $hasAnswer->answer_name = $answer['answer_name'];
                         $hasAnswer->save();
