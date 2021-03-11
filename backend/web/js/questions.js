@@ -44,17 +44,7 @@ $(document).on('click', '.btn-edit', function (event) {
 });
 
 $(document).ready(function () {
-    // sortable('.sortable', 'serialize', {
-    //     handle: '.sortable-handle',
-    //     forcePlaceholderSize: true,
-    //     itemSerializer: (serializedItem, sortableContainer) => {
-    //         return {
-    //             position:  serializedItem.index + 1,
-    //             html: serializedItem.html
-    //         }
-    //     }
-    // dropTargetContainerClass: 'sorting'
-    // });
+    numberPosition();
     $('.sortable').sortable({
         items: '.question',
         handle: '.sortable-handle',
@@ -67,7 +57,8 @@ $(document).ready(function () {
                 url: '/' + lang + '/question/question-order',
                 data: {key: ui.item.attr('id'), pos: ui.item.index()},
                 success: function () {
-                    alert('перемещено')
+                    alert('перемещено');
+                    numberPosition();
                 }
             });
         }
@@ -78,6 +69,11 @@ $(document).on("pjax:success", function () {
     // document.location.replace();
 });
 
+function numberPosition() {
+    $('.question').each(function (index) {
+        $(this).find('.question-number-position').text('№ ' + (index + 1));
+    });
+}
 
 // $('.change-status').on('change', function () {
 // let id = $(this).closest('question').attr('id');

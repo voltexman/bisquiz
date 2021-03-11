@@ -54,8 +54,9 @@ $this->registerCss('.ui-sortable-helper
                 <?php foreach ($questions->getModels() as $question) : ?>
                     <div class="question" id="<?= $question->id ?>">
                         <div class="card-hover-shadow-2x mb-3 card">
-                            <div class="card-header"><i
-                                        class="header-icon pe-7s-menu icon-gradient bg-plum-plate"> </i>№ <?= $question->sort ?>
+                            <div class="card-header">
+                                <i class="header-icon pe-7s-menu icon-gradient bg-plum-plate"> </i>
+                                <div class="question-number-position"></div>
                                 <div class="ml-3 card-title-question-name"></div>
                                 <div class="btn-actions-pane-right actions-icon-btn">
                                     <a href="<?= Url::to(['question/delete', 'id' => $question->id]) ?>"
