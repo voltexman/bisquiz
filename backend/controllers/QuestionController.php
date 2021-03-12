@@ -10,6 +10,7 @@ use common\models\QuestionSearch;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -97,7 +98,6 @@ class QuestionController extends Controller
 
             if ($questions->load(Yii::$app->request->post())) {
                 $questions->save();
-                Yii::$app->response->format = Response::FORMAT_JSON;
 
                 $oldAnswers = ArrayHelper::getColumn(
                     Answer::find()
@@ -129,6 +129,13 @@ class QuestionController extends Controller
 
                     }
                 }
+
+                Yii::$app->response->format = Response::FORMAT_JSON;
+
+                return [
+                    'title' => Html::encode($model->question_name),
+                    'text' => 'Вопрос успешно сохранен'
+                ];
             }
         }
 
@@ -137,7 +144,7 @@ class QuestionController extends Controller
         ]);
     }
 
-    public function actionQuestionOrder(): void
+    public function actionQuestionOrder(): string
     {
         if (Yii::$app->request->isAjax) {
             $post = Yii::$app->request->post();
@@ -145,6 +152,7 @@ class QuestionController extends Controller
                 $this->findModel($post['key'])->order($post['pos']);
             }
         }
+        return 'Вопрос перемещён';
     }
 
     /**

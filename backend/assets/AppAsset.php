@@ -13,13 +13,14 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/main.css',
-        'css/site.css'
+        'css/site.css',
+//        'css/jquery.toast.min.css'
     ];
     public $js = [
         'js/main.js',
-//        'js/html5sortable.min.js',
+//        'js/jquery.toast.min.js',
         'https://code.jquery.com/ui/1.12.1/jquery-ui.js',
-        'js/questions.js',
+        'js/custom.js',
 //        '//cdn.jsdelivr.net/npm/sweetalert2@10',
     ];
     public $depends = [

@@ -9,6 +9,8 @@ use Yii;
 
 class QuestionHelper
 {
+    const MAX_LENGTH_QUESTION_HINT = 300;
+
     public static function typeList(): array
     {
         return [

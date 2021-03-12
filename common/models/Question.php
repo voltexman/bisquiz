@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use quiz\helpers\QuestionHelper;
 use Yii;
 
 /**
@@ -57,7 +58,7 @@ class Question extends \yii\db\ActiveRecord
         return [
             [['question_name'], 'required'],
             [['quiz_id', 'sort', 'type', 'multiple', 'required', 'own', 'status'], 'integer'],
-            [['question_hint'], 'string'],
+            [['question_hint'], 'string', 'max' => QuestionHelper::MAX_LENGTH_QUESTION_HINT],
             [['question_name'], 'string', 'max' => 255],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::class, 'targetAttribute' => ['quiz_id' => 'id']],
         ];
